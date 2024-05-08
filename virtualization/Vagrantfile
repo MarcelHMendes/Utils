@@ -1,0 +1,88 @@
+### User database
+user_configs = {
+    "MarcelHMendes" => {
+        user_id: 3,
+        user_name: "mmendes",
+        git_mail: "marcelmendes@dcc.ufmg.br",
+        software_dir: "/home/vagrant/",
+        local_repos: {
+            ansible: "ansible/",
+        },
+        remote_repos: {
+            dev_configs: "git@github.com:MarcelHMendes/dev-configs.git"
+        },
+        pool_name: "vagrant_mmendes"
+    },
+    "Fulano" => {
+        user_id: 1,
+        user_name: "fulano",
+        git_mail: "fulano@xulambs.ufmg.br",
+        local_repos: {
+            ansible: "/home/fulano/git/ansible/",
+            server: "/home/fulano/git/server/"
+        },
+        remote_repos: {
+            dev_configs: "git@github.com:fulano/dev-configs.git"
+        },
+        pool_name: "vagrant_fulano"
+    },
+
+}
+
+### User configuration
+# Configuring github_user below should be sufficient as most other parameters
+# are taken from the user_configs dict above. However, you may want to adjust
+# branch names for the GitHub repos below in case you're testing a specific
+# branch.
+github_user = "MarcelHMendes"
+
+user_id = user_configs[github_user][:user_id]
+user_name = user_configs[github_user][:user_name]
+ansible_repo_path = user_configs[github_user][:local_repos][:ansible]
+pool_name = user_configs[github_user][:pool_name]
+git_email = user_configs[github_user][:git_mail]
+software_dir = user_configs[github_user][:software_dir]
+
+### Variables
+remote_repo = user_configs[github_user][:remote_repos][:dev_configs]
+remote_branch = "master"
+
+software_repo = "git@github.com:#{github_user}/target_repo.git"
+software_branch = "master"
+
+Vagrant.configure("2") do |config|
+    # Disabling NFS on debian/bullseye64 image
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+
+    config.ssh.forward_agent = true
+    config.vm.define "dev" do |site|
+        user_net = (user_id * 2).to_s
+        site.vm.network "private_network", ip: "10.171." + user_net + ".251", netmask: "255.255.255.0"
+        site.vm.box = "debian/bullseye64"
+        site.vm.hostname = "dev"
+        site.vm.box_check_update = false
+        site.vm.provider :libvirt do |libvirt_site|
+            libvirt_site.memory = "4096"
+            libvirt_site.cpus = "1"
+            libvirt_site.storage_pool_name = pool_name
+            libvirt_site.default_prefix = pool_name
+        end
+        site.vm.provision "ansible" do |ansible|
+            ansible.verbose = ""
+            ansible.config_file = "#{ansible_repo_path}/ansible.cfg"
+            ansible.playbook = "#{ansible_repo_path}/dev.yml"
+            ansible.extra_vars = {
+                git_name: github_user,
+                git_mail: git_email,
+                user_id: user_id,
+                software_repo: software_repo,
+                software_branch: software_branch,
+                remote_repo: remote_repo,
+                remote_branch: remote_branch,
+                software_dir: software_dir,
+                storage_pool_name: pool_name,
+                ansible_dir: ansible_repo_path,
+            }
+        end
+    end
+end

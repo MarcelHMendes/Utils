@@ -1,0 +1,7 @@
+---
+- hosts: dev
+  vars:
+    ansible_ssh_pipelining: true
+  gather_facts: true
+  roles:
+    - common

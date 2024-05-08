@@ -1,0 +1,35 @@
+---
+common_system_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - dnsutils
+  - gnupg
+  - lsb-release
+  - ntp
+  - python3-pip
+  - python-is-python3
+  - resolvconf
+  - rsync
+  - sudo
+  - vim
+  - htop
+  - wget
+
+common_python_packages:
+  - shyaml
+  - pyroute2
+  - black
+  - isort
+  - matplotlib
+  - numpy
+
+ntp_timezone: GMT
+
+sysctl_disable_ipv6_autoconf:
+  - net.ipv6.conf.all.accept_ra: 0
+  - net.ipv6.conf.default.accept_ra: 0
+  - net.ipv6.conf.all.autoconf: 0
+  - net.ipv6.conf.default.autoconf: 0
+
+sshd_config_check_ignore: true

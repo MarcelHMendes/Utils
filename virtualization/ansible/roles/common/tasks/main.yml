@@ -1,0 +1,49 @@
+---
+- name: Install or upgrade common system packages
+  become: true
+  apt:
+    name: "{{ common_system_packages }}"
+    state: latest
+    update_cache: true
+
+- name: Configure resolvconf to use Google DNS
+  become: true
+  copy:
+    src: resolv.conf.d/base
+    dest: /etc/resolvconf/resolv.conf.d/base
+
+- name: Update resolvconf runtime
+  changed_when: false
+  become: true
+  command: resolvconf -u
+
+- name: Set the correct timezone
+  become: true
+  file:
+    src: "/usr/share/zoneinfo/{{ ntp_timezone }}"
+    dest: /etc/localtime
+    state: link
+    force: yes
+
+- name: Ensure NTP is running and enabled
+  become: true
+  service:
+    name: ntp
+    state: started
+    enabled: yes
+
+- name: Disable IPv6 autoconfiguration
+  become: true
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_dict: "{{ sysctl_disable_ipv6_autoconf }}"
+
+- name: Install common Python libraries
+  become: true
+  pip:
+    name: "{{ common_python_packages }}"
+    state: latest

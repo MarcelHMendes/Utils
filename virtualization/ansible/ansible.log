@@ -1,0 +1,22 @@
+2024-05-08 18:28:27,245 p=388893 u=mmendes n=ansible | PLAY [dev] *********************************************************************
+2024-05-08 18:28:27,260 p=388893 u=mmendes n=ansible | TASK [Gathering Facts] *********************************************************
+2024-05-08 18:28:28,742 p=388893 u=mmendes n=ansible | ok: [dev]
+2024-05-08 18:28:28,787 p=388893 u=mmendes n=ansible | TASK [common : Install or upgrade common system packages] **********************
+2024-05-08 18:29:28,190 p=388893 u=mmendes n=ansible | changed: [dev]
+2024-05-08 18:29:28,220 p=388893 u=mmendes n=ansible | TASK [common : Configure resolvconf to use Google DNS] *************************
+2024-05-08 18:29:29,395 p=388893 u=mmendes n=ansible | changed: [dev]
+2024-05-08 18:29:29,420 p=388893 u=mmendes n=ansible | TASK [common : Update resolvconf runtime] **************************************
+2024-05-08 18:29:29,939 p=388893 u=mmendes n=ansible | ok: [dev]
+2024-05-08 18:29:29,949 p=388893 u=mmendes n=ansible | TASK [common : Set the correct timezone] ***************************************
+2024-05-08 18:29:30,438 p=388893 u=mmendes n=ansible | changed: [dev]
+2024-05-08 18:29:30,459 p=388893 u=mmendes n=ansible | TASK [common : Ensure NTP is running and enabled] ******************************
+2024-05-08 18:29:31,356 p=388893 u=mmendes n=ansible | ok: [dev]
+2024-05-08 18:29:31,380 p=388893 u=mmendes n=ansible | TASK [common : Disable IPv6 autoconfiguration] *********************************
+2024-05-08 18:29:31,951 p=388893 u=mmendes n=ansible | changed: [dev] => (item={'key': 'net.ipv6.conf.all.accept_ra', 'value': 0})
+2024-05-08 18:29:32,250 p=388893 u=mmendes n=ansible | changed: [dev] => (item={'key': 'net.ipv6.conf.default.accept_ra', 'value': 0})
+2024-05-08 18:29:32,555 p=388893 u=mmendes n=ansible | changed: [dev] => (item={'key': 'net.ipv6.conf.all.autoconf', 'value': 0})
+2024-05-08 18:29:32,823 p=388893 u=mmendes n=ansible | changed: [dev] => (item={'key': 'net.ipv6.conf.default.autoconf', 'value': 0})
+2024-05-08 18:29:32,850 p=388893 u=mmendes n=ansible | TASK [common : Install common Python libraries] ********************************
+2024-05-08 18:30:01,457 p=388893 u=mmendes n=ansible | changed: [dev]
+2024-05-08 18:30:01,519 p=388893 u=mmendes n=ansible | PLAY RECAP *********************************************************************
+2024-05-08 18:30:01,520 p=388893 u=mmendes n=ansible | dev                        : ok=8    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
