@@ -60,14 +60,15 @@ def draw_digraph(grafo, name):
     plt.clf()
 
 
-def assert_reachable_asns(pfx_records, status=""):
+def assert_reachable_asns(pfx_records, graph, status=""):
     reachable = []
     for c in pfx_records:
         for asn in pfx_records[c]:
             if asn not in reachable:
                 reachable.append(asn)
-
     print("Number of ASNs that %s pfx was able to reach %i" % (status, len(reachable)))
+    assert len(reachable) == graph.number_of_nodes()
+
 
 
 def create_parser():
@@ -118,11 +119,11 @@ def main():
         config_data[args.measurement]["prefixes"]["invalid"],
     )
 
-    assert_reachable_asns(non_invalid_pfx, "NON_INVALID")
-    assert_reachable_asns(invalid_pfx, "INVALID")
-
     non_invalid_graph = create_graph(non_invalid_pfx)
     invalid_graph = create_graph(invalid_pfx)
+
+    assert_reachable_asns(non_invalid_pfx, non_invalid_graph, "NON_INVALID")
+    assert_reachable_asns(invalid_pfx, invalid_graph,"INVALID")
 
     draw_digraph(non_invalid_graph, f"{args.location}_non_invalid")
     draw_digraph(invalid_graph, f"{args.location}_invalid")
