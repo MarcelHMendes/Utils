@@ -1,0 +1,11 @@
+Host vagrant
+  HostName <private host ip>
+  ProxyJump mmendes@host
+  User vagrant
+  ForwardAgent yes
+
+Host <host>
+  HostName <host ip>
+  User mmendes
+  ForwardAgent yes
+  IdentityFile ~/.ssh/<user>
