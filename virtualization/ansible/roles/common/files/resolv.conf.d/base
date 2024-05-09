@@ -1,7 +1,3 @@
-# Use TCP to get around UDP blocks at some IXPs
-# (not currently needed as AMS-IX now allows UDP through firewall)
-# options use-vc
-
 # Always use Google's DNS servers
 nameserver 8.8.8.8
 nameserver 8.8.4.4
